@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+let fortuneCookies = require('./lib/fortune');
 
 // Set up handlebars view engine
 let handlebars = require('express-handlebars')
@@ -16,7 +17,8 @@ app.get('/', function(req, res) {
 });
 
 app.get('/about', function(req, res) {
-    res.render('about');
+
+    res.render('about', { fortune: fortuneCookies.getFortune() });
 });
 
 // Static Files middleware
