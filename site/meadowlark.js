@@ -10,8 +10,17 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
-// main
+// Static Files middleware
+app.use(express.static(__dirname + '/public'));
 
+
+// Test middleware
+app.use(function(req, res, next) {
+    res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
+    next();
+});
+
+// main
 app.get('/', function(req, res) {
     res.render('home');
 });
@@ -20,9 +29,6 @@ app.get('/about', function(req, res) {
 
     res.render('about', { fortune: fortuneCookies.getFortune() });
 });
-
-// Static Files middleware
-app.use(express.static(__dirname + '/public'));
 
 // 404 catch all handler
 app.use(function(req, res) {
@@ -41,4 +47,4 @@ app.use(function(req, res) {
 app.listen(app.get('port'), () => {
     console.log('Express started on htpp://localhost:' + app.get('port') + ';');
 
-})
+});
